@@ -16,27 +16,33 @@ app.post('/upload', function(req, res){
   var form = new formidable.IncomingForm();
 
   // specify that we want to allow the user to upload multiple files in a single request
-  form.multiples = true;
+  // right now its NO!
+  // don't seem do anything to stop multi file upload...
+  form.multiples = false;
 
   // store all uploads in the /uploads directory
   form.uploadDir = path.join(__dirname, '/uploads');
-
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
   form.on('file', function(field, file) {
-    fs.rename(file.path, path.join(form.uploadDir, file.name));
+    fs.rename(file.path, path.join(form.uploadDir, file.name), function(err) {
+      if(err) {
+        //can't do res.xxx, it will cause error with header rewrite
+        console.log('An error has occured: \n' + err);
+      }
+    });
   });
-
   // log any errors that occur
   form.on('error', function(err) {
-    console.log('An error has occured: \n' + err);
+    if(err) {
+      //can't do res.xxx, it will cause error with header rewrite
+      console.log('An error has occured: \n' + err);
+    }
   });
-
-  // once all the files have been uploaded, send a response to the client
+  // once all the files have been uploaded, sjson a response to the client
   form.on('end', function() {
-    res.end('success');
+    res.json({status: 'uploaded'});
   });
-
   // parse the incoming request containing the form data
   form.parse(req);
 
