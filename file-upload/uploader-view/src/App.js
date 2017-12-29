@@ -7,20 +7,34 @@ import Dropzone from 'react-dropzone';
 class App extends React.Component {
   constructor() {
     super()
-    this.state = { files: [] }
+    this.state = { files: [] };
+    this.onFileDropExecute = this.onFileDropExecute.bind(this);
   }
 
-  onDrop(files) {
+  onFileDropExecute(acceptedFiles, rejectedFiles) {
+    console.log(acceptedFiles, rejectedFiles);
     this.setState({
-      files
+      files: acceptedFiles,
     });
+
+    const file = acceptedFiles[0];
+    let formData = new FormData();
+    formData.append('uploads[]', file, file.name);
+    // do stuff with files...
+    axios.post('http://localhost:3000/upload', formData).then((response) => {
+      console.log('successsss!');
+      console.log(response);
+    })
+    .catch((err) => console.log(err));
   }
 
   render() {
     return (
       <section>
         <div className="dropzone">
-          <Dropzone onDrop={this.onDrop.bind(this)}>
+          <Dropzone onDrop={this.onFileDropExecute}
+            name={'uploads[]'}
+          >
             <p>Try dropping some files here, or click to select files to upload.</p>
           </Dropzone>
         </div>
