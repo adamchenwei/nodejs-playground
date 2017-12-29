@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import axios from 'axios';
 import Dropzone from 'react-dropzone';
@@ -22,19 +21,17 @@ class App extends React.Component {
     formData.append('uploads[]', file, file.name);
     // do stuff with files...
     axios({
-      method: 'POST',
+      method: 'post',
       url: 'http://localhost:3000/upload',
       data: formData,
-      onUploadProgress: (progressEvent) => {
-        console.log('progress');
-        console.log(progressEvent);
-      }
-    })
-    .then((response) => {
+      // onUploadProgress: (progressEvent) => {
+      //   console.log('progress');
+      //   console.log(progressEvent);
+      // }
+    }).then((response) => {
       console.log('successsss!');
       console.log(response);
-    })
-    .catch((err) => console.log(err));
+    }).catch((err) => console.log(err));
   }
 
   render() {
