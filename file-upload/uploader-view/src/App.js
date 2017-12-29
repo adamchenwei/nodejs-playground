@@ -21,7 +21,16 @@ class App extends React.Component {
     let formData = new FormData();
     formData.append('uploads[]', file, file.name);
     // do stuff with files...
-    axios.post('http://localhost:3000/upload', formData).then((response) => {
+    axios({
+      method: 'POST',
+      url: 'http://localhost:3000/upload',
+      data: formData,
+      onUploadProgress: (progressEvent) => {
+        console.log('progress');
+        console.log(progressEvent);
+      }
+    })
+    .then((response) => {
       console.log('successsss!');
       console.log(response);
     })
