@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "file-upload/uploader-service/package.json",
+        "file-upload/uploader-view/package.json"
+      ]
+    }
+  }
+}
